@@ -1,0 +1,36 @@
+project_name: yaml-remarshaler
+release:
+  github:
+    owner: marrccampbell
+    name: yaml-remarshaler
+builds:
+  - id: yaml-remarshaler
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - "386"
+    env:
+      - CGO_ENABLED=0
+    ldflags: -s -w
+      -X github.com/marccampbell/yaml-remarshaler/pkg/version.version={{.Version}}
+      -X github.com/marccampbell/yaml-remarshaler/pkg/version.gitSHA={{.Commit}}
+      -X github.com/marccampbell/yaml-remarshaler/pkg/version.buildTime={{.Date}}
+      -extldflags "-static"
+    binary: yaml-remarshaler
+    hooks: {}
+archives:
+  - id: yaml-remarshaler
+    builds:
+      - yaml-remarshaler
+    format: tar.gz
+    name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - licence*
+      - LICENCE*
+      - license*
+      - LICENSE*
+      - readme*
+      - README*

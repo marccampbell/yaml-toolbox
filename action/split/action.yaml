@@ -1,0 +1,14 @@
+name: 'YAML Splitter'
+description: 'Split YAML'
+inputs:
+  path:  
+    description: 'path to multidoc yaml file'
+    required: true
+  out:
+    description: 'output directory'
+    required: true
+runs:
+  using: 'docker'
+  image: '../../Dockerfile'
+  args:
+    - '/yaml-remarshaler split ${{ inputs.path }} --out ${{ inputs.out }}'

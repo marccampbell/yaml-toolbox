@@ -5,14 +5,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/marccampbell/yaml-remarshaler/pkg/remarshaler"
+	"github.com/marccampbell/yaml-remarshaler/pkg/splitter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-func RemarshalCmd() *cobra.Command {
+func SplitCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:           "remarshal",
+		Use:           "split",
 		Short:         "",
 		Long:          ``,
 		SilenceUsage:  true,
@@ -22,14 +22,23 @@ func RemarshalCmd() *cobra.Command {
 			viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			path := args[0]
+			inputFile := args[0]
 
-			fi, err := os.Stat(path)
+			v := viper.GetViper()
+			outputDir := v.GetString("out")
+			if _, err := os.Stat(outputDir); os.IsNotExist(err) {
+				err := os.MkdirAll(outputDir, 0755)
+				if err != nil {
+					return err
+				}
+			}
+
+			fi, err := os.Stat(inputFile)
 			if err != nil {
 				return err
 			}
 			if fi.IsDir() {
-				err := filepath.Walk(path,
+				err := filepath.Walk(inputFile,
 					func(path string, info os.FileInfo, err error) error {
 						if err != nil {
 							return err
@@ -39,7 +48,7 @@ func RemarshalCmd() *cobra.Command {
 							return nil
 						}
 
-						if err := remarshalFileInPlace(path); err != nil {
+						if err := splitFile(path, outputDir); err != nil {
 							return err
 						}
 
@@ -49,7 +58,7 @@ func RemarshalCmd() *cobra.Command {
 					return err
 				}
 			} else {
-				if err := remarshalFileInPlace(path); err != nil {
+				if err := splitFile(inputFile, outputDir); err != nil {
 					return err
 				}
 			}
@@ -58,23 +67,28 @@ func RemarshalCmd() *cobra.Command {
 		},
 	}
 
+	cmd.Flags().String("out", "", "the output directory to store the split files in")
+
 	return cmd
 }
 
-func remarshalFileInPlace(filename string) error {
+func splitFile(filename string, outputDir string) error {
 	input, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return err
 	}
 
-	remarshaled, err := remarshaler.RemarshalYAML(input)
+	splitDocs, err := splitter.SplitYAML(input)
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile(filename, remarshaled, 0644)
-	if err != nil {
-		return err
+	for filename, content := range splitDocs {
+		err = ioutil.WriteFile(filepath.Join(outputDir, filename), content, 0644)
+		if err != nil {
+			return err
+		}
+
 	}
 
 	return nil
