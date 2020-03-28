@@ -21,6 +21,8 @@ func RootCmd() *cobra.Command {
 	cobra.OnInitialize(initConfig)
 
 	cmd.AddCommand(RemarshalCmd())
+	cmd.AddCommand(SplitCmd())
+
 	cmd.AddCommand(VersionCmd())
 
 	viper.BindPFlags(cmd.Flags())
