@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/marccampbell/yaml-remarshaler/pkg/version"
+	"github.com/marccampbell/yaml-toolbox/pkg/version"
 	"github.com/spf13/cobra"
 )
 

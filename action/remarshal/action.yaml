@@ -8,4 +8,4 @@ runs:
   using: 'docker'
   image: '../../Dockerfile'
   args:
-    - '/yaml-remarshaler remarshal ${{ inputs.path }}'
+    - '/yaml-toolbox remarshal ${{ inputs.path }}'

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/marccampbell/yaml-remarshaler/pkg/splitter"
+	"github.com/marccampbell/yaml-toolbox/pkg/splitter"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

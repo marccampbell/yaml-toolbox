@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/marccampbell/yaml-remarshaler/pkg/remarshaler"
+	"github.com/marccampbell/yaml-toolbox/pkg/remarshaler"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

@@ -3,7 +3,7 @@ export GO111MODULE=on
 export GOPROXY=https://proxy.golang.org
 
 SHELL := /bin/bash -o pipefail
-VERSION_PACKAGE = github.com/marccampbell/yaml-remarshaler/pkg/version
+VERSION_PACKAGE = github.com/marccampbell/yaml-toolbox/pkg/version
 VERSION ?=`git describe --tags --dirty`
 DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
 
@@ -36,9 +36,9 @@ endef
 test:
 	go test ./pkg/... ./cmd/... ./internal/... -coverprofile cover.out
 
-.PHONY: yaml-remarshaler
-yaml-remarshaler: fmt vet
-	go build ${LDFLAGS} -o bin/yaml-remarshaler github.com/marccampbell/yaml-remarshaler/cmd
+.PHONY: yaml-toolbox
+yaml-toolbox: fmt vet
+	go build ${LDFLAGS} -o bin/yaml-toolbox github.com/marccampbell/yaml-toolbox/cmd
 
 .PHONY: fmt
 fmt:

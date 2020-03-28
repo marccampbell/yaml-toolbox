@@ -11,4 +11,4 @@ runs:
   using: 'docker'
   image: '../../Dockerfile'
   args:
-    - '/yaml-remarshaler split ${{ inputs.path }} --out ${{ inputs.out }}'
+    - '/yaml-toolbox split ${{ inputs.path }} --out ${{ inputs.out }}'

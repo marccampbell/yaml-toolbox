@@ -1,10 +1,10 @@
-project_name: yaml-remarshaler
+project_name: yaml-toolbox
 release:
   github:
     owner: marrccampbell
-    name: yaml-remarshaler
+    name: yaml-toolbox
 builds:
-  - id: yaml-remarshaler
+  - id: yaml-toolbox
     goos:
       - linux
       - windows
@@ -15,16 +15,16 @@ builds:
     env:
       - CGO_ENABLED=0
     ldflags: -s -w
-      -X github.com/marccampbell/yaml-remarshaler/pkg/version.version={{.Version}}
-      -X github.com/marccampbell/yaml-remarshaler/pkg/version.gitSHA={{.Commit}}
-      -X github.com/marccampbell/yaml-remarshaler/pkg/version.buildTime={{.Date}}
+      -X github.com/marccampbell/yaml-toolbox/pkg/version.version={{.Version}}
+      -X github.com/marccampbell/yaml-toolbox/pkg/version.gitSHA={{.Commit}}
+      -X github.com/marccampbell/yaml-toolbox/pkg/version.buildTime={{.Date}}
       -extldflags "-static"
-    binary: yaml-remarshaler
+    binary: yaml-toolbox
     hooks: {}
 archives:
-  - id: yaml-remarshaler
+  - id: yaml-toolbox
     builds:
-      - yaml-remarshaler
+      - yaml-toolbox
     format: tar.gz
     name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
     files:

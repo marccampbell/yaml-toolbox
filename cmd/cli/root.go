@@ -10,7 +10,7 @@ import (
 
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "yaml-remarshaler",
+		Use:   "yaml-toolbox",
 		Short: "",
 		Long:  `.`,
 		PreRun: func(cmd *cobra.Command, args []string) {
