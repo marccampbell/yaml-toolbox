@@ -2,6 +2,8 @@ package cli
 
 import (
 	"io/ioutil"
+	"os"
+	"path/filepath"
 
 	"github.com/marccampbell/yaml-remarshaler/pkg/remarshaler"
 	"github.com/spf13/cobra"
@@ -20,20 +22,36 @@ func RemarshalCmd() *cobra.Command {
 			viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// this does an inplace remarshal only right now
-			input, err := ioutil.ReadFile(args[0])
+			path := args[0]
+
+			fi, err := os.Stat(path)
 			if err != nil {
 				return err
 			}
+			if fi.IsDir() {
+				err := filepath.Walk(path,
+					func(path string, info os.FileInfo, err error) error {
+						if err != nil {
+							return err
+						}
 
-			remarshaled, err := remarshaler.FixUpYAML(input)
-			if err != nil {
-				return err
-			}
+						if info.IsDir() {
+							return nil
+						}
 
-			err = ioutil.WriteFile(args[0], remarshaled, 0644)
-			if err != nil {
-				return err
+						if err := remarshalFileInPlace(path); err != nil {
+							return err
+						}
+
+						return nil
+					})
+				if err != nil {
+					return err
+				}
+			} else {
+				if err := remarshalFileInPlace(path); err != nil {
+					return err
+				}
 			}
 
 			return nil
@@ -41,4 +59,23 @@ func RemarshalCmd() *cobra.Command {
 	}
 
 	return cmd
+}
+
+func remarshalFileInPlace(filename string) error {
+	input, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+
+	remarshaled, err := remarshaler.FixUpYAML(input)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(filename, remarshaled, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
