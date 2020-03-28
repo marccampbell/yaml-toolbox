@@ -2,12 +2,12 @@ on:
   pull_request:
     branches:
       - master
-    push:
-      branches:
-        - "master"
-      tags:
-        - "v*.*.*"
-  
+  push:
+    branches:
+    - "master"
+    tags:
+    - "v*.*.*"
+
 jobs:
   build-yaml-remarshaler:
     runs-on: ubuntu-18.04
