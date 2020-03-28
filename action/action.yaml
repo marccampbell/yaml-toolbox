@@ -1,0 +1,11 @@
+name: 'YAML Remarshaler'
+description: 'Remarshal YAML'
+inputs:
+  path:  
+    description: 'path to yaml file'
+    required: true
+runs:
+  using: 'docker'
+  image: '../Dockerfile'
+  args:
+    - ${{ inputs.path }}

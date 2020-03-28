@@ -1,0 +1,28 @@
+on:
+    pull_request:
+      branches:
+        - master
+    push:
+      branches:
+        - "master"
+      tags:
+        - "v*.*.*"
+  
+  jobs:
+    build-yaml-remarshaler:
+      runs-on: ubuntu-18.04
+      steps:
+        - uses: actions/setup-go@v1
+          with:
+            go-version: "1.13.8"
+  
+        - name: setup env
+          run: |
+            echo "::set-env name=GOPATH::$(go env GOPATH)"
+            echo "::add-path::$(go env GOPATH)/bin"
+          shell: bash
+  
+        - uses: actions/checkout@v2
+  
+        - run: make test build
+  
