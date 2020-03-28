@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/marccampbell/yaml-toolbox/pkg/remarshaler"
+	yaml "github.com/replicatedhq/yaml/v3"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -65,6 +66,12 @@ func remarshalFileInPlace(filename string) error {
 	input, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return err
+	}
+
+	var test interface{}
+	if err := yaml.Unmarshal(input, &test); err != nil {
+		// not a yaml, not an error
+		return nil
 	}
 
 	remarshaled, err := remarshaler.RemarshalYAML(input)
