@@ -13,7 +13,7 @@ func SplitYAML(input []byte) (map[string][]byte, error) {
 	outputFiles := map[string][]byte{}
 	docs := bytes.Split(input, []byte("\n---\n"))
 
-	for _, doc := range docs {
+	for idx, doc := range docs {
 		if bytes.HasPrefix(doc, []byte("---\n")) {
 			doc = doc[4:]
 		}
@@ -24,7 +24,7 @@ func SplitYAML(input []byte) (map[string][]byte, error) {
 
 		filename, err := generateName(doc)
 		if err != nil {
-			return nil, errors.Wrap(err, "failed to generate name")
+			return nil, errors.Wrapf(err, "failed to generate name for file #%d", idx)
 		}
 
 		outputFiles[filename] = doc
@@ -37,7 +37,7 @@ func generateName(content []byte) (string, error) {
 	o := OverlySimpleGVK{}
 
 	if err := yaml.Unmarshal(content, &o); err != nil {
-		return "", errors.Wrap(err, "failed to unmarshal yaml")
+		return "", errors.Wrapf(err, "failed to unmarshal yaml %q", string(content))
 	}
 
 	return fmt.Sprintf("%s-%s.yaml", o.Metadata.Name, strings.ToLower(o.Kind)), nil
